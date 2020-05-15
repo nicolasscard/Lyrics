@@ -1,19 +1,42 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { Card } from '../components/index';
 import { Theme } from '../helpers/theme';
 
 const width = Theme.width;
 
 const ShowLyrics = ({ route }) => {
+  const [lastSong, setlastSong] = useState(null);
 
-  console.log('ShowLyrics');
-  console.log(route);
+  useEffect(() => {
+    getLastSong();
+  }, []);
 
-  const artist = route.params?.artist ?? null;
-  const songName = route.params?.songName ?? null;
-  const lyrics = route.params?.lyrics ?? null;
+  const getLastSong = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@arraySongs');
+      if (value !== null) {
+        const arraySongs = JSON.parse(value);
+        console.log('arraySongs');
+        console.log(arraySongs.length);
+        if (arraySongs.length > 0) {
+          setlastSong(arraySongs[arraySongs.length - 1]);
+        }
+        else {
+          console.log('arraySongs is empty');
+        }
+      }
+      else {
+        console.log('arraySongs is null');
+      }
+    } catch(e) {
+      console.log('e');
+      console.log(e);
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -21,19 +44,21 @@ const ShowLyrics = ({ route }) => {
         type="song"
         containerStyle={{ justifyContent: 'center' }}
       >
-        {artist
+        {lastSong
           ? (
-            <ScrollView style={{}}>
+            <>
               <Text style={styles.songName}>
-                {songName}
+                {lastSong.songName}
               </Text>
               <Text style={styles.artist}>
-                {artist}
+                {lastSong.artist}
               </Text>
-              <Text style={styles.lyrics}>
-                {lyrics}
-              </Text>
-            </ScrollView>
+              <ScrollView style={{ marginTop: 10 }}>
+                <Text style={styles.lyrics}>
+                  {lastSong.lyrics}
+                </Text>
+              </ScrollView>
+            </>
           )
           : (
             <Text style={styles.errorText}>

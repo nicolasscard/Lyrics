@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { Card, Input } from '../components/index';
 import { Theme } from '../helpers/theme';
 
@@ -9,19 +11,34 @@ const width = Theme.width;
 const url = 'https://api.lyrics.ovh/v1';
 
 const SearchSong = ({ route, navigation }) => {
-
-  console.log('searchSong');
-  console.log(route);
-
   const [artist, setartist] = useState('');
   const [songName, setsongName] = useState('');
+  const [arraySongs, setarraySongs] = useState([]);
+
   const [loading, setloading] = useState(false);
   const [error, seterror] = useState(false);
 
-  // useEffect(() => {
-  //   getMyGame();
-  //   getActions();
-  // }, [matchFromParams]);
+  useEffect(() => {
+    getSongs();
+  }, []);
+
+  const getSongs = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@arraySongs');
+      if (value !== null) {
+        const storeArraySongs = JSON.parse(value);
+        console.log('storeArraySongs');
+        console.log(storeArraySongs.length);
+        await setarraySongs(storeArraySongs);
+      }
+      else {
+        console.log('arraySongs is null');
+      }
+    } catch(e) {
+      console.log('e');
+      console.log(e);
+    }
+  };
 
   const search = async () => {
     console.log('search');
@@ -30,22 +47,19 @@ const SearchSong = ({ route, navigation }) => {
 
     await fetch(`${url}/${artist}/${songName}`)
       .then(response => response.json())
-        // const json = response.json();
-      .then(json => {
-        console.log('json');
-        console.log(json);
-
+      .then(async (json) => {
         if (json.lyrics) {
-          console.log('json.lyrics');
-          console.log(json.lyrics);
+          console.log('hay cancion');
+          const newSong = {
+            artist,
+            songName,
+            lyrics: json.lyrics
+          };
+          const newArraySongs = arraySongs;
+          newArraySongs.push(newSong);
+          setarraySongs(newArraySongs);
           setloading(false);
-
-          navigation.dispatch(
-            CommonActions.navigate({
-              name: 'ShowLyrics',
-              params: { artist, songName, lyrics: json.lyrics }
-            })
-          );
+          await saveSong(newArraySongs);
         }
         else {
           console.log('else');
@@ -59,6 +73,22 @@ const SearchSong = ({ route, navigation }) => {
         setloading(false);
       });
     console.log('no esperé');
+  };
+
+  const saveSong = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('@arraySongs', jsonValue)
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.navigate({ name: 'ShowLyrics' })
+        );
+      });
+
+    } catch (e) {
+      console.log('e');
+      console.log(e);
+    }
   };
 
   return (
