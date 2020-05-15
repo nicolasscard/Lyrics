@@ -56,7 +56,8 @@ const styles = {
     fontSize: width * 0.04,
     width: '100%',
     borderRadius: width * 0.01,
-    color: Theme.colors.white
+    color: Theme.colors.white,
+    paddingHorizontal: width * 0.04
   },
 };
 

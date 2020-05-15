@@ -73,6 +73,6 @@ export const Theme = {
   input: {
     borderRadius: width * 0.2,
     width: width * 0.4,
-    height: 43,
-  }
+    paddingHorizontal: 20
+  },
 };

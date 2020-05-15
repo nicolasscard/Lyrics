@@ -16,53 +16,52 @@ import { Theme } from './helpers/theme';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const LyricsStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="SearchSong"
-      screenOptions={{
-        gestureEnabled: false,
-        headerStyle: {
-          backgroundColor: Theme.colors.primary,
-        },
-        headerTitleAlign: 'center',
-        headerTitleStyle: {
-          fontSize: 30,
-          color: Theme.colors.white,
-
-        }
-      }}
-    >
-      <Stack.Screen
-        name="SearchSong"
-        component={SearchSong}
-        options={{ title: 'Buscar una canción' }}
-      />
-      <Stack.Screen
-        name="ShowLyrics"
-        component={ShowLyrics}
-        initialParams={{ title: 'Letra' }}
-        options={({ route }) => ({ title: route.params.title })}
-      />
-    </Stack.Navigator>
-  );
-};
+// const LyricsStack = () => {
+//   return (
+//     <Stack.Navigator
+//       initialRouteName="SearchSong"
+//       screenOptions={{
+//         gestureEnabled: false,
+//         headerStyle: {
+//           backgroundColor: Theme.colors.primary,
+//         },
+//         headerTitleAlign: 'center',
+//         headerTitleStyle: {
+//           fontSize: 30,
+//           color: Theme.colors.white,
+//
+//         }
+//       }}
+//     >
+//       <Stack.Screen
+//         name="SearchSong"
+//         component={SearchSong}
+//         options={{ title: 'Buscar una canción' }}
+//       />
+//       <Stack.Screen
+//         name="ShowLyrics"
+//         component={ShowLyrics}
+//         initialParams={{ title: 'Letra' }}
+//         options={({ route }) => ({ title: route.params.title })}
+//       />
+//     </Stack.Navigator>
+//   );
+// };
 
 const BottomTab = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Buscar"
+      initialRouteName="SearchSong"
       tabBarOptions={{
         activeTintColor: Theme.colors.white,
         activeBackgroundColor: Theme.colors.secondary,
         inactiveTintColor: Theme.colors.gray,
         inactiveBackgroundColor : Theme.colors.primary,
-
       }}
     >
       <Tab.Screen
-        name="LyricsStack"
-        component={LyricsStack}
+        name="SearchSong"
+        component={SearchSong}
         options={{
           tabBarLabel: 'Buscar Letra',
           tabBarIcon: ({ color, size }) => (
@@ -84,6 +83,21 @@ const BottomTab = () => {
             <Icon
               name="history"
               type="FontAwesome"
+              color={color}
+              size={size}
+            />
+          )
+        }}
+      />
+      <Tab.Screen
+        name="ShowLyrics"
+        component={ShowLyrics}
+        options={{
+          tabBarLabel: 'Letra',
+          tabBarIcon: ({ color, size }) => (
+            <Icon
+              name="queue-music"
+              type="MaterialIcons"
               color={color}
               size={size}
             />
