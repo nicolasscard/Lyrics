@@ -26,6 +26,7 @@ const Input = ({
       <TextInput
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
+        placeholderTextColor={Theme.colors.error}
         autoCorrect={false}
         style={[styles.inputStyle, inputStyle]}
         value={value}

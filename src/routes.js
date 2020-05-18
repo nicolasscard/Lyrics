@@ -7,46 +7,86 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Icon } from 'react-native-elements';
 
-import { SearchSong } from './screens/SearchSong';
-import { ShowLyrics } from './screens/ShowLyrics';
-import { History } from './screens/History';
+import SearchSong from './screens/SearchSong';
+import ShowLyrics from './screens/ShowLyrics';
+import History from './screens/History';
 
 import { Theme } from './helpers/theme';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// const LyricsStack = () => {
-//   return (
-//     <Stack.Navigator
-//       initialRouteName="SearchSong"
-//       screenOptions={{
-//         gestureEnabled: false,
-//         headerStyle: {
-//           backgroundColor: Theme.colors.primary,
-//         },
-//         headerTitleAlign: 'center',
-//         headerTitleStyle: {
-//           fontSize: 30,
-//           color: Theme.colors.white,
-//
-//         }
-//       }}
-//     >
-//       <Stack.Screen
-//         name="SearchSong"
-//         component={SearchSong}
-//         options={{ title: 'Buscar una canción' }}
-//       />
-//       <Stack.Screen
-//         name="ShowLyrics"
-//         component={ShowLyrics}
-//         initialParams={{ title: 'Letra' }}
-//         options={({ route }) => ({ title: route.params.title })}
-//       />
-//     </Stack.Navigator>
-//   );
-// };
+const headerTitle = (route) =>
+  (<View>
+    <Text style={{ textAlign: 'center' }}>
+      {route.children}
+    </Text>
+  </View>);
+
+const slHeaderTitle = ({ route }) => ({
+  title:
+    (<>
+      <Text style={Theme.title}>
+        {route.params.songName}
+      </Text>
+      <Text>{'\n'}</Text>
+      <Text style={Theme.subTitle}>
+        {route.params.artist}
+      </Text>
+    </>)
+});
+
+const LyricsStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="SearchSong"
+      screenOptions={{
+        gestureEnabled: false,
+        headerStyle: { backgroundColor: Theme.colors.primary, height: 60 },
+        headerTintColor: Theme.colors.white,
+        headerTitleAlign: 'center',
+        headerTitle
+      }}
+    >
+      <Stack.Screen
+        name="SearchSong"
+        component={SearchSong}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ShowLyrics"
+        component={ShowLyrics}
+        options={slHeaderTitle}
+      />
+    </Stack.Navigator>
+  );
+};
+
+const HistoryStack = () => {
+  return (
+    <Stack.Navigator
+      initialRouteName="History"
+      screenOptions={{
+        gestureEnabled: false,
+        headerStyle: { backgroundColor: Theme.colors.primary, height: 60 },
+        headerTintColor: Theme.colors.white,
+        headerTitleAlign: 'center',
+        headerTitle
+      }}
+    >
+      <Stack.Screen
+        name="History"
+        component={History}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ShowLyrics"
+        component={ShowLyrics}
+        options={slHeaderTitle}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTab = () => {
   return (
@@ -61,9 +101,9 @@ const BottomTab = () => {
     >
       <Tab.Screen
         name="SearchSong"
-        component={SearchSong}
+        component={LyricsStack}
         options={{
-          tabBarLabel: 'Buscar Letra',
+          tabBarLabel: 'Buscar Canción',
           tabBarIcon: ({ color, size }) => (
             <Icon
               name="search"
@@ -76,28 +116,13 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="History"
-        component={History}
+        component={HistoryStack}
         options={{
           tabBarLabel: 'Historial',
           tabBarIcon: ({ color, size }) => (
             <Icon
               name="history"
               type="FontAwesome"
-              color={color}
-              size={size}
-            />
-          )
-        }}
-      />
-      <Tab.Screen
-        name="ShowLyrics"
-        component={ShowLyrics}
-        options={{
-          tabBarLabel: 'Letra',
-          tabBarIcon: ({ color, size }) => (
-            <Icon
-              name="queue-music"
-              type="MaterialIcons"
               color={color}
               size={size}
             />

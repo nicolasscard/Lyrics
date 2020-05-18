@@ -8,13 +8,16 @@ const Card = ({ children, type = null, containerStyle = null }) => {
 
   switch (type) {
     case 'form':
-      cardStyle = [styles.form, containerStyle];
+      cardStyle = [styles.card, styles.form, containerStyle];
       break;
     case 'song':
-      cardStyle = [styles.song, containerStyle];
+      cardStyle = [styles.card, styles.song, containerStyle];
+      break;
+    case 'history':
+      cardStyle = [styles.card, styles.history, containerStyle];
       break;
     default:
-      cardStyle = [styles.form, containerStyle];
+      cardStyle = [styles.card, containerStyle];
       break;
   }
 
@@ -26,19 +29,24 @@ const Card = ({ children, type = null, containerStyle = null }) => {
 };
 
 const styles = {
-  form: {
+  card: {
     flex: 1,
     backgroundColor: Theme.colors.primary,
     margin: Theme.margin,
     padding: Theme.padding * 2,
-    // borderRadius: Theme.borderRadius
+    width: Theme.width - Theme.margin,
+  },
+  form: {
+    padding: Theme.padding * 1.5,
   },
   song: {
-    flex: 1,
+    borderRadius: Theme.borderRadius,
     backgroundColor: Theme.colors.secondary,
-    margin: Theme.margin,
-    padding: Theme.padding * 2,
-    borderRadius: Theme.borderRadius
+  },
+  history: {
+    borderRadius: Theme.borderRadius / 4,
+    backgroundColor: Theme.colors.secondary,
+    padding: Theme.padding,
   }
 };
 

@@ -9,13 +9,11 @@ export const Theme = {
 
   // COLORS
   colors: {
-    primary: '#110f2f', // violet
-    secondary: '#1d1a48', // white
-    white: '#FFFFFF', // white
-    gray: '#666666', // white
-    transparent: 'rgba(256,256, 256, 0.4)',
-    primaryTransparent: 'rgba(196,15,242, 0.4)',
-    transparentIcon: 'rgba(256,256, 256, 0.4)',
+    primary: '#110f2f', // dark Violet
+    secondary: '#1d1a48', // violet
+    white: '#FFFFFF',
+    gray: '#666666',
+    error: '#fa4d4a', // red
   },
 
   //spaces
@@ -26,11 +24,18 @@ export const Theme = {
   borderRadius: 50,
 
   // TEXT
-  //titles
-  textPrimaryTitle: { fontSize: width * 0.185, fontWeight: 'bold', color: '#FFFFFF' },
-  textSecondaryTitle: { fontSize: width * 0.0625, fontWeight: 'bold', color: '#FFFFFF' },
-  textPrimarySubTitle: { fontSize: width * 0.05, color: '#FFFFFF' },
-  textSecondarySubTitle: { fontSize: width * 0.05, fontWeight: 'bold', color: '#FFFFFF' },
+  // Title
+  title: {
+    fontSize: 30,
+    textAlign: 'center',
+    color: '#FFFFFF'
+  },
+  // SubTitle
+  subTitle: {
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#666666'
+  },
 
   // input
   textLabel: {
