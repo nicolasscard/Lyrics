@@ -18,7 +18,7 @@ export const searchSong = (artist, songName, is_last_song) => {
     fetch(`${url}/${artist}/${songName}`)
       .then(response => {
         if (response.ok) return response.json();
-        else throw new Error('No encontramos la canción.');
+        else searchSongFail(dispatch, is_last_song);
       })
       .then((song) => {
         const songSearched = { artist, songName, lyrics: song.lyrics };
@@ -32,13 +32,17 @@ export const searchSong = (artist, songName, is_last_song) => {
       })
       .catch((err) => {
         console.log('searchSong action error: ', err);
-        const errorMje = 'Lo sentimos!\nOcurrió un error buscando tu canción.';
-
-        // el error debe ser mostrado en la pantalla que corresponde
-        if (is_last_song) dispatch({ type: SEARCH_SONG_FAIL, payload: errorMje });
-        else dispatch({ type: HISTORY_SEARCH_SONG_FAIL, payload: errorMje });
+        searchSongFail(dispatch, is_last_song);
       });
   };
 };
+
+export const searchSongFail = (dispatch, is_last_song) => {
+  const errorMje = 'Lo sentimos!\nOcurrió un error buscando tu canción.';
+
+  // el error debe ser mostrado en la pantalla que corresponde
+  if (is_last_song) dispatch({ type: SEARCH_SONG_FAIL, payload: errorMje });
+  else dispatch({ type: HISTORY_SEARCH_SONG_FAIL, payload: errorMje });
+}
 
 export const setInitialStates = () => ({ type: SET_INITIAL });
