@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useEffect } from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
@@ -8,22 +9,21 @@ import { Card } from '../components/index';
 import { Theme } from '../helpers/theme';
 
 const width = Theme.width;
-const height = Theme.height;
 
 const mapStateToProps = state => {
   const { arraySongs } = state.songReducer;
   return { arraySongs };
 };
 
-const History = ({ route, navigation, arraySongs }) => {
+const History = ({
+  route, navigation, // navigation props
+  arraySongs // redux props
+}) => {
 
-  useEffect(() => {
-    console.log('History >>>>>>> arraySongs');
-  }, [arraySongs]);
-
+  // each song from array
   const renderItem = (song, key) => {
-    console.log('History >>>>>>> renderItem');
     const { artist, songName } = song;
+
     return (
       <View style={styles.rowView} key={key}>
         <View>
@@ -32,14 +32,17 @@ const History = ({ route, navigation, arraySongs }) => {
         </View>
         <TouchableOpacity onPress={() => {
           navigation.dispatch(
-            CommonActions.navigate({ name: 'ShowLyrics', params: song })
+            CommonActions.navigate({
+              name: 'ShowLyrics',
+              params: { ...song, is_last_song: false}
+            })
           );
         }}>
           <Icon
             name="queue-music"
             type="MaterialIcons"
             color={Theme.colors.white}
-            size={35}
+            size={30}
           />
         </TouchableOpacity>
       </View>
@@ -47,15 +50,15 @@ const History = ({ route, navigation, arraySongs }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={Theme.container}>
       <Card type={'history'} >
-        <Text style={styles.screenTitle}>{'Historial'}</Text>
+        <Text style={Theme.title}>Historial</Text>
         {arraySongs && arraySongs.length > 0
-          ? (<ScrollView style={{ marginTop: 20 }}>
+          ? (<ScrollView style={{ marginTop: Theme.margin }}>
               {arraySongs.map((song, index)  => renderItem(song, index))}
             </ScrollView>)
-          : (<Text style={styles.errorText}>
-              {'No hay canciones en su historial.'}
+          : (<Text style={Theme.warning}>
+              No hay canciones en su historial.
             </Text>)
         }
       </Card>
@@ -64,43 +67,20 @@ const History = ({ route, navigation, arraySongs }) => {
 };
 
 const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   rowView: {
     flexDirection: 'row',
-    // width: '100%',
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  screenTitle: {
-    fontSize: 30,
-    textAlign: 'center',
-    color: Theme.colors.white
+    marginTop: Theme.margin / 4
   },
   artist: {
-    fontSize: 15,
+    fontSize: width * 0.04,
     color: Theme.colors.gray
   },
   songName: {
-    fontSize: 20,
+    fontSize: width * 0.045,
     color: Theme.colors.white
   },
-  lyrics: {
-    marginTop: 20,
-    fontSize: 20,
-    textAlign: 'center',
-    color: Theme.colors.white
-  },
-  errorText: {
-    color: Theme.colors.white,
-    marginTop: 20,
-    fontSize: width * 0.04,
-    textAlign: 'center'
-  }
 };
 
 export default connect(mapStateToProps, null)(History);

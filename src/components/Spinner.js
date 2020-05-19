@@ -1,10 +1,14 @@
+
 import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
-import { Theme } from '../helpers/theme';
 
+import { Theme } from '../helpers/theme';
 import { Icon } from 'react-native-elements';
 
-const Spinner = ({ size, color, containerStyle }) => {
+const Spinner = ({
+  size, color, containerStyle,
+ }) => {
+
   return (
     <View style={[styles.spinnerStyle, containerStyle]}>
       <Icon
@@ -24,10 +28,8 @@ const Spinner = ({ size, color, containerStyle }) => {
 
 const styles = {
   spinnerStyle: {
-    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: '#110f2f'
   }
 };
 

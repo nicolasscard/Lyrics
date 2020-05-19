@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { TextInput, View, Text } from 'react-native';
 
@@ -22,7 +23,7 @@ const Input = ({
 }) => {
   return (
     <View style={[styles.containerStyle, containerStyle]}>
-      <Text style={[Theme.textLabel, labelStyle]}>{label}</Text>
+      <Text style={[Theme.label, labelStyle]}>{label}</Text>
       <TextInput
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}

@@ -34,7 +34,7 @@ const styles = {
     backgroundColor: Theme.colors.primary,
     margin: Theme.margin,
     padding: Theme.padding * 2,
-    width: Theme.width - Theme.margin,
+    width: Theme.width - Theme.margin * 2,
   },
   form: {
     padding: Theme.padding * 1.5,

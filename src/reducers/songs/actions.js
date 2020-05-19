@@ -21,17 +21,14 @@ export const searchSong = (artist, songName, is_last_song) => {
         else throw new Error('No encontramos la canción.');
       })
       .then((song) => {
-        console.log('>>>> HAY CANCION <<<<<<');
         const songSearched = { artist, songName, lyrics: song.lyrics };
 
+        //is_last_song determina el origen de la busqueda, para actualizar donde corresponda
         if (is_last_song) {
           dispatch({ type: SAVE_LAST_SONG, payload: songSearched });
           dispatch({ type: SAVE_SONG, payload: { artist, songName } });
         }
-        else {
-          dispatch({ type: SEARCH_SONG_SUCCESS, payload: songSearched });
-          // searchSongSuccess(dispatch, songSearched);
-        }
+        else dispatch({ type: SEARCH_SONG_SUCCESS, payload: songSearched });
       })
       .catch((err) => {
         console.log('searchSong action error: ', err);

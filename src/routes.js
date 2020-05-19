@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import { Icon } from 'react-native-elements';
 
 import SearchSong from './screens/SearchSong';
@@ -23,18 +22,24 @@ const headerTitle = (route) =>
     </Text>
   </View>);
 
-const slHeaderTitle = ({ route }) => ({
-  title:
-    (<>
-      <Text style={Theme.title}>
-        {route.params.songName}
-      </Text>
-      <Text>{'\n'}</Text>
-      <Text style={Theme.subTitle}>
-        {route.params.artist}
-      </Text>
-    </>)
-});
+const slHeaderTitle = ({ route }) => {
+  const length = route.params.songName.length;
+  return ({
+    title:
+      (<>
+        <Text style={[
+          Theme.title,
+          length > 20 && { fontSize: Theme.width * 0.045 }
+        ]}>
+          {route.params.songName}
+        </Text>
+        <Text>{'\n'}</Text>
+        <Text style={Theme.subTitle}>
+          {route.params.artist}
+        </Text>
+      </>)
+  });
+};
 
 const LyricsStack = () => {
   return (
@@ -42,7 +47,10 @@ const LyricsStack = () => {
       initialRouteName="SearchSong"
       screenOptions={{
         gestureEnabled: false,
-        headerStyle: { backgroundColor: Theme.colors.primary, height: 60 },
+        headerStyle: {
+          backgroundColor: Theme.colors.primary,
+          height: Theme.height * 0.075
+        },
         headerTintColor: Theme.colors.white,
         headerTitleAlign: 'center',
         headerTitle
@@ -68,7 +76,10 @@ const HistoryStack = () => {
       initialRouteName="History"
       screenOptions={{
         gestureEnabled: false,
-        headerStyle: { backgroundColor: Theme.colors.primary, height: 60 },
+        headerStyle: {
+          backgroundColor: Theme.colors.primary,
+          height: Theme.height * 0.075
+        },
         headerTintColor: Theme.colors.white,
         headerTitleAlign: 'center',
         headerTitle
@@ -113,6 +124,7 @@ const BottomTab = () => {
             />
           )
         }}
+        lazy={false}
       />
       <Tab.Screen
         name="History"
@@ -128,6 +140,7 @@ const BottomTab = () => {
             />
           )
         }}
+        lazy={false}
       />
     </Tab.Navigator>
   );

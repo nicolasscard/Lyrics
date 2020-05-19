@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { Button } from 'react-native-elements';
 import { CommonActions } from '@react-navigation/native';
@@ -33,47 +33,48 @@ const SearchSong = ({
   const [phArtist, setphArtist] = useState('');
   const [phSongName, setphSongName] = useState('');
 
+  // Inicialize redux variables
   useEffect(() => {
-    console.log('SearchSong >>>>>>> setInitialStates');
     setInitialStates();
   }, []);
 
-  // delete when finish test
+  // When finish search, navigate to ShowLyrics
   useEffect(() => {
-    console.log('SearchSong >>>>>>> getInitialStates');
-    if (arraySongs) console.log('arraySongs.length: ', arraySongs.length);
-    if (songSearched) console.log('songSearched: ', songSearched.artist, songSearched.songName);
-    if (lastSong) console.log('lastSong: ', lastSong.artist, lastSong.songName);
-    console.log('other variables:');
-    console.log('loading: ', loading);
-    console.log('error: ', searchSgErr);
-  }, []);
+    if (searchSgSuccess) goToLastSong();
+  }, [searchSgSuccess]);
 
-  useEffect(() => {
-    console.log('SearchSong >>>>>>> searchSgSuccess');
-    if (searchSgSuccess && lastSong) {
-      navigation.dispatch(
-        CommonActions.navigate({
-          name: 'ShowLyrics',
-          params: { artist: lastSong.artist, songName: lastSong.songName,  } })
-      );
-    }
-  }, [searchSgSuccess, lastSong, navigation]);
-
-  const onPressButton = async () => {
-    console.log('SearchSong >>>>>>> onPressButton');
+  const search = async () => {
     if (!artist) setphArtist('Debe ingresar un artista');
     if (!songName) setphSongName('Debe ingresar un nombre');
 
     if (artist && songName) {
+      Keyboard.dismiss(); // close Keyboard
+
+      //capitalize names
       const newArtist = artist.charAt(0).toUpperCase() + artist.slice(1);
       const newSongName = songName.charAt(0).toUpperCase() + songName.slice(1);
       await searchSong(newArtist, newSongName, true);
     }
   };
 
+  // navigate to ShowLyrics
+  const goToLastSong = () => {
+    if (lastSong) {
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'ShowLyrics',
+          params: {
+            artist: lastSong.artist,
+            songName: lastSong.songName,
+            is_last_song: true
+          }
+        })
+      );
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View style={Theme.container}>
       <Card
         type="form"
         containerStyle={{ justifyContent: 'space-between' }}
@@ -93,38 +94,44 @@ const SearchSong = ({
             placeholder={phSongName}
           />
           {searchSgErr &&
-            <Text style={[Theme.textLabel, styles.errorText]}>
-              {searchSgErr}
-            </Text>
+            <Text style={Theme.error}>{searchSgErr}</Text>
           }
         </View>
-        <Button
-          onPress={onPressButton}
-          loading={loading}
-          title="BUSCAR"
-          titleStyle={{ color: Theme.colors.white, fontSize: Theme.width * 0.05 }}
-          type="outline"
-          loadingProps={{ color: Theme.colors.white }}
-          containerStyle={{ marginTop: Theme.margin }}
-          buttonStyle={{ borderColor: Theme.colors.white}}
-        />
+
+        <View>
+          <Button
+            onPress={search}
+            loading={loading}
+            title="BUSCAR"
+            titleStyle={styles.titleButton}
+            type="outline"
+            loadingProps={{ color: Theme.colors.white }}
+            containerStyle={{ marginTop: Theme.margin }}
+            buttonStyle={{ borderColor: Theme.colors.white}}
+          />
+          {lastSong &&
+            <TouchableOpacity onPress={goToLastSong}>
+              <Text style={styles.lSButtonText}>
+                Ver última búsqueda
+              </Text>
+            </TouchableOpacity>
+          }
+        </View>
       </Card>
     </View>
   );
 };
 
 const styles = {
-  container: {
-    flex: 1,
-    backgroundColor: Theme.colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
+  lSButtonText: {
+    fontSize: width * 0.045,
+    color: Theme.colors.gray,
+    textAlign: 'center',
+    marginTop: Theme.margin / 2
   },
-  errorText: {
-    color: '#fa4d4a',
-    marginTop: 20,
-    fontSize: width * 0.04,
-    textAlign: 'center'
+  titleButton: {
+    color: Theme.colors.white,
+    fontSize: Theme.width * 0.05
   }
 };
 
