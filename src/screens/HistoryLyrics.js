@@ -1,18 +1,17 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 import { searchSong } from '../reducers/songs/actions';
-
 import { Card, Spinner } from '../components/index';
 import { Theme } from '../helpers/theme';
 
 const width = Theme.width;
 
 const mapStateToProps = state => {
-  const { lastSong, songSearched, loading, hrySearchSgErr } = state.songReducer;
-  return { lastSong, songSearched, loading, hrySearchSgErr };
+  const { songSearched, loading, hrySearchSgErr } = state.songReducer;
+  return { songSearched, loading, hrySearchSgErr };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -23,39 +22,25 @@ const mapDispatchToProps = dispatch => ({
   ) => dispatch(searchSong(artist, songName, is_last_song)),
 });
 
-const ShowLyrics = ({
-  route, navigation,  // navigation props
-  lastSong, songSearched, loading, hrySearchSgErr, // redux props
+export const HistoryLyrics = ({
+  route, // navigation props
+  songSearched, loading, hrySearchSgErr, // redux props
   searchSong  // redux actions
 }) => {
-  const [song, setsong] = useState(null);
 
-  // Update when songSearched change
-  useEffect(() => {
-    console.log('songSearched');
-    if (songSearched) {
-      console.log(songSearched.songName);
-      setsong(songSearched);
-    }
-  }, [songSearched]);
-  
   // Update when route change
   useEffect(() => {
     if (route.params) {
-      const { artist, songName, is_last_song } = route.params;
-      if (!is_last_song) searchSong(artist, songName, false);
-      else setsong(lastSong);
+      const { artist, songName } = route.params;
+      searchSong(artist, songName, false);
     }
   }, [route]);
 
   return (
     <View style={Theme.container}>
-      <Card
-        type="song"
-        containerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-      >
+      <Card type="song" containerStyle={styles.card}>
         {loading
-          ? (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          ? (<View style={styles.card}>
               <Text style={Theme.loading}>Loading...</Text>
               <Spinner
                 size={50}
@@ -69,10 +54,10 @@ const ShowLyrics = ({
                   {hrySearchSgErr}
                 </Text>
               </View>)
-            : song &&
+            : songSearched &&
               (<>
                 <ScrollView>
-                  <Text style={styles.lyrics}>{song.lyrics}</Text>
+                  <Text style={styles.lyrics}>{songSearched.lyrics}</Text>
                 </ScrollView>
               </>)
         }
@@ -82,6 +67,10 @@ const ShowLyrics = ({
 };
 
 const styles = {
+  card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   lyrics: {
     fontSize: width * 0.04,
     textAlign: 'center',
@@ -89,4 +78,4 @@ const styles = {
   },
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowLyrics);
+export default connect(mapStateToProps, mapDispatchToProps)(HistoryLyrics);

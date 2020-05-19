@@ -15,7 +15,7 @@ const Spinner = ({
         name="music-note"
         type="Fontisto"
         color={color}
-        size={size / 1.5}
+        size={size * 0.5}
       />
       <ActivityIndicator
         size={size || 'large'}

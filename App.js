@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {store, persistor} from './src/store';
 
-import { Root } from './src/routes';
+import { Root } from './src/routes/routes';
 import { Spinner } from './src/components/index';
 import { Theme } from './src/helpers/theme';
 

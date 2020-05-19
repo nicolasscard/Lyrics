@@ -7,15 +7,14 @@ import { CommonActions } from '@react-navigation/native';
 
 import { Card, Input } from '../components/index';
 import { Theme } from '../helpers/theme';
-
 import { setInitialStates, searchSong } from '../reducers/songs/actions';
 
 const width = Theme.width;
 
 const mapStateToProps = state => {
-  const { arraySongs, lastSong, loading, searchSgErr, searchSgSuccess, songSearched } = state.songReducer;
+  const { arraySongs, lastSong, loading, searchSgErr, searchSgSuccess } = state.songReducer;
 
-  return { arraySongs, lastSong, loading, searchSgErr, searchSgSuccess, songSearched };
+  return { arraySongs, lastSong, loading, searchSgErr, searchSgSuccess };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -25,7 +24,7 @@ const mapDispatchToProps = dispatch => ({
 
 const SearchSong = ({
   route, navigation, // navigation props
-  loading, searchSgErr, searchSgSuccess, songSearched, arraySongs, lastSong, // redux props
+  loading, searchSgErr, searchSgSuccess, arraySongs, lastSong, // redux props
   setInitialStates, searchSong // redux actions
 }) => {
   const [artist, setartist] = useState('');
@@ -57,7 +56,7 @@ const SearchSong = ({
     }
   };
 
-  // navigate to ShowLyrics
+  // navigate to ShowLyrics, params requerided to show header title
   const goToLastSong = () => {
     if (lastSong) {
       navigation.dispatch(
@@ -66,7 +65,6 @@ const SearchSong = ({
           params: {
             artist: lastSong.artist,
             songName: lastSong.songName,
-            is_last_song: true
           }
         })
       );

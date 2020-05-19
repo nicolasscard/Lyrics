@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
@@ -16,7 +16,7 @@ const mapStateToProps = state => {
 };
 
 const History = ({
-  route, navigation, // navigation props
+  navigation, // navigation props
   arraySongs // redux props
 }) => {
 
@@ -34,7 +34,7 @@ const History = ({
           navigation.dispatch(
             CommonActions.navigate({
               name: 'ShowLyrics',
-              params: { ...song, is_last_song: false}
+              params: song
             })
           );
         }}>
